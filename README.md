@@ -1,3 +1,5 @@
+Fork from https://github.com/pixelcog/parallax.js/ for using as drupal-library
+
 Parallax.js
 ===========
 
