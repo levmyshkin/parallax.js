@@ -1,10 +1,11 @@
 {
   "name": "jquery-parallax.js",
-  "version": "1.5.0",
-  "description": "Simple parallax scrolling effect inspired by spotify.com implemented as a jQuery plugin",
-  "main": "parallax.min.js",
+  "version": "2.0.0",
+  "description": "Simple parallax scrolling effect inspired by spotify.com - no dependencies, jQuery optional",
+  "main": "parallax.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node scripts/build.js",
+    "test": "node test/run.js"
   },
   "repository": {
     "type": "git",
@@ -14,7 +15,9 @@
     "parallax",
     "scroll",
     "scrolling",
-    "image"
+    "image",
+    "vanilla",
+    "jquery"
   ],
   "author": "Mike Greiling <mike@pixelcog.com> (http://pixelcog.com)",
   "license": "MIT",
@@ -22,7 +25,11 @@
     "url": "https://github.com/pixelcog/parallax.js/issues"
   },
   "homepage": "https://github.com/pixelcog/parallax.js#readme",
-  "dependencies": {
-    "jquery": ">=1.7"
+  "devDependencies": {
+    "jquery1": "npm:jquery@1.12.4",
+    "jquery3": "npm:jquery@^3.7.1",
+    "jquery4": "npm:jquery@^4.0.0",
+    "playwright-core": "^1.56.0",
+    "terser": "^5.44.0"
   }
 }

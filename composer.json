@@ -1,9 +1,15 @@
 {
     "name": "levmyshkin/parallaxjs",
-    "description": "Parallax.js pluging as drupal-library. Fork from pixelcog/parallax.js.",
+    "description": "Parallax.js plugin as drupal-library - no dependencies, jQuery optional. Fork from pixelcog/parallax.js.",
     "homepage": "https://pixelcog.github.io/parallax.js/",
     "type": "drupal-library",
     "license": "(MIT)",
-    "keywords": ["Drupal","EBT","parallax.js"],
+    "keywords": [
+        "Drupal",
+        "EBT",
+        "parallax.js",
+        "vanilla",
+        "jquery"
+    ],
     "require": {}
 }

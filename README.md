@@ -1,7 +1,71 @@
 Fork from https://github.com/pixelcog/parallax.js/ for using as drupal-library
 
-Parallax.js
-===========
+Parallax.js 2.0.0
+=================
+
+Simple parallax scrolling with **no dependencies**. Version 2.0.0 of this fork rewrites parallax.js 1.5.0 with native DOM APIs. jQuery is now **optional**: if a page loads jQuery, the 1.x plugin API (`$(el).parallax()`) keeps working unchanged.
+
+(Not to be confused with the upstream [v2.0.0-alpha](https://github.com/pixelcog/parallax.js/tree/v2.0.0-alpha) branch, which is a separate, unfinished rewrite.)
+
+## Upgrading from 1.x
+
+Replace `parallax.js` / `parallax.min.js`. The file names are unchanged, so Drupal library definitions (`/libraries/parallaxjs/parallax.min.js`) keep working.
+
+- **The site still loads jQuery:** nothing to change. All of these behave as before:
+  - `$(el).parallax(options)`, the `'refresh'`, `'render'` and `'destroy'` commands, and `$(window).parallax(options)` for defaults
+  - `$(el).data('px.parallax')`, whose instance still has `$element`, `$mirror` and `$slider`
+  - `$.fn.parallax.Constructor`, `$.fn.parallax.noConflict()`
+  - the `data-parallax="scroll"` data API
+  - `$(window).trigger('resize')` / `('scroll')`
+- **The site drops jQuery:** use the native API below. The `data-parallax="scroll"` data API works without jQuery too.
+
+If jQuery is loaded *after* parallax.js, register the plugin manually: `ParallaxScroll.installJQuery(jQuery)`.
+
+## Usage without jQuery
+
+```html
+<div class="parallax-window" data-parallax="scroll" data-image-src="/path/to/image.jpg"></div>
+<script src="parallax.min.js"></script>
+```
+
+or from JavaScript:
+
+```js
+var p = new ParallaxScroll('.parallax-window', { imageSrc: '/path/to/image.jpg', speed: 0.3 });
+ParallaxScroll.init('.parallax-window', options);  // every match; same rules as $(...).parallax(options)
+ParallaxScroll.init(window, { speed: 0.5 });       // change the defaults (same as ParallaxScroll.configure)
+ParallaxScroll.init('.parallax-window', 'refresh');
+ParallaxScroll.getInstance(el);
+p.destroy();                                       // or ParallaxScroll.destroy(el)
+```
+
+The global is `window.ParallaxScroll`. It is also exposed as `window.Parallax` unless another script (for example wagerfield's parallax) already defined that. With a bundler: `const Parallax = require('jquery-parallax.js');`.
+
+Instances keep the 1.x properties (`speed`, `imageSrc`, `imageWidth`, `offsetTop`, …). Element references are `p.element`, `p.mirror` and `p.slider` (`p.sliderElements` if the markup holds several `.parallax-slider` children). With jQuery loaded, `$element`, `$mirror` and `$slider` are also available.
+
+## Behaviour changes from 1.5.0
+
+These are bug fixes. Everything else is intended to behave exactly as 1.5.0.
+
+- `destroy` puts a `.parallax-slider` that came from the element's own markup back into the element (1.x deleted it with the mirror), restoring its inline style.
+- Once the last instance is destroyed, the animation-frame loop stops. 1.x kept it running, and started another loop on every later re-init.
+- `destroy` on an element without the effect, or one that only got the iOS/Android background fallback, is a no-op instead of throwing.
+- Options named `destroy`, `refresh` or `render` can't overwrite the methods.
+- The global `requestAnimationFrame` polyfill for very old browsers is gone.
+
+## Development
+
+```sh
+npm install
+npm run build   # parallax.js -> parallax.min.js
+npm test        # compares the rewrite with the original 1.5.0 plugin in Chrome
+```
+
+`npm test` runs every case in `test/cases.js` against the original plugin (`test/original/`) on jQuery 1.12, 3 and 4, and against the rewrite with and without jQuery. The cases cover scrolling, resizing, data attributes, positions, bleed, speed, existing slider markup, `img` targets, re-init, configure, destroy, mirror containers, hidden elements, jQuery-triggered events and the iOS/Android fallbacks. After each step it compares the mirror and slider styles, the instance state and the global state. It also runs the API checks in `test/api-tests.js`. It needs a local Chrome (or set `CHROME_PATH`).
+
+-----
+
+# Parallax.js 1.5.0 (original README)
 
 Simple parallax scrolling implemented as a jQuery plugin.  
 [http://pixelcog.com/parallax.js/](http://pixelcog.com/parallax.js/)
